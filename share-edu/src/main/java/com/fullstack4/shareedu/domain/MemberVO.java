@@ -16,4 +16,7 @@ public class MemberVO {
     private String email;
     private String phone;
     private LocalDate reg_date;
+    private int fail_cnt;
+    private LocalDate last_login_date;
+    private String member_state;
 }

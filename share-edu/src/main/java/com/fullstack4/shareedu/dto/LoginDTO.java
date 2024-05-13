@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -21,4 +22,8 @@ public class LoginDTO {
 
     private String save_id;
     private String auto_login;
+
+    private int fail_cnt;
+    private LocalDate last_login_date;
+    private String member_state;
 }

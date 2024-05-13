@@ -4,8 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fullstack4.shareedu.mapper.LoginMapper">
     <select id="login" resultType="com.fullstack4.shareedu.domain.MemberVO">
-        SELECT member_idx, user_id, pwd, name, email, phone, reg_date
+        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state
         FROM tbl_member
         WHERE user_id = #{user_id}
     </select>
+
+    <update id="failCountUp">
+        UPDATE tbl_member
+        SET fail_cnt = fail_cnt + 1
+        WHERE user_id = #{user_id}
+    </update>
+
+    <update id="updateLoginInfo">
+        UPDATE tbl_member
+        SET fail_cnt = 0, last_login_date = NOW()
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>

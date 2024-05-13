@@ -37,4 +37,8 @@ public class MemberDTO {
     @Pattern(regexp = "^(010)[1-9]{1}[0-9]{3}[0-9]{4}$", message = "휴대폰 번호 형식에 맞춰 입력하세요.")
     private String phone;
     private LocalDate reg_date;
+
+    private int fail_cnt;
+    private LocalDate last_login_date;
+    private String member_state;
 }

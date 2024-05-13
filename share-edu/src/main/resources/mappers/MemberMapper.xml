@@ -21,7 +21,7 @@
     </insert>
 
     <select id="view" resultType="com.fullstack4.shareedu.domain.MemberVO">
-        SELECT member_idx, user_id, pwd, name, email, phone, reg_date
+        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state
         FROM tbl_member
         WHERE user_id = #{user_id}
     </select>
