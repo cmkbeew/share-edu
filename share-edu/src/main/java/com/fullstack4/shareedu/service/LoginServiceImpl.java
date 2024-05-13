@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -20,11 +22,11 @@ public class LoginServiceImpl implements LoginService{
     public MemberDTO login(String user_id, String pwd) {
         MemberVO vo = loginMapper.login(user_id);
         MemberDTO dto = null;
-        log.info("vo : {}", vo);
 
         if(vo != null && vo.getPwd().equals(pwd)) {
             dto = modelMapper.map(vo, MemberDTO.class);
         } else {
+            // 아이디 일치, 비밀번호 불일치 시 fail_cnt+1
             loginMapper.failCountUp(user_id);
         }
 
@@ -34,5 +36,26 @@ public class LoginServiceImpl implements LoginService{
     @Override
     public void updateLoginInfo(String user_id) {
         loginMapper.updateLoginInfo(user_id);
+    }
+
+    @Override
+    public String changeTempPwd(String user_id) {
+        // 임시 비밀번호 생성
+        UUID uuid = UUID.randomUUID();
+        String[] uuids = uuid.toString().split("-");
+        String tempPwd = uuids[0];
+
+        log.info("tempPwd : {}", tempPwd);
+
+        loginMapper.changeTempPwd(user_id, tempPwd);
+
+        return tempPwd;
+    }
+
+    @Override
+    public int findPwdCheck(String user_id) {
+        int result = loginMapper.findPwdCheck(user_id);
+
+        return result;
     }
 }

@@ -7,4 +7,7 @@ public interface LoginService {
 
     void updateLoginInfo(String user_id);
 
+    String changeTempPwd(String user_id);
+
+    int findPwdCheck(String user_id);
 }

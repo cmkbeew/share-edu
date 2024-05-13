@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fullstack4.shareedu.mapper.LoginMapper">
     <select id="login" resultType="com.fullstack4.shareedu.domain.MemberVO">
-        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state
+        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state, temp_pwd
         FROM tbl_member
         WHERE user_id = #{user_id}
     </select>
@@ -20,4 +20,15 @@
         SET fail_cnt = 0, last_login_date = NOW()
         WHERE user_id = #{user_id}
     </update>
+
+    <update id="changeTempPwd">
+       UPDATE tbl_member
+       SET pwd = #{pwd}, temp_pwd = 'Y'
+       WHERE user_id = #{user_id}
+    </update>
+
+    <select id="findPwdCheck">
+        SELECT count(*) FROM tbl_member
+        WHERE user_id = #{user_id}
+    </select>
 </mapper>

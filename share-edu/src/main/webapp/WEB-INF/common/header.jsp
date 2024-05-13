@@ -6,6 +6,7 @@
     <meta charset="UTF-8"/>
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <script src="/resources/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div class="container">

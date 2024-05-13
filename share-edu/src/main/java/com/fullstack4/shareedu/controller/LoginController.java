@@ -52,10 +52,8 @@ public class LoginController {
 //                                         @RequestParam(name = "user_id") String user_id,
 //                                         @RequestParam(name = "pwd") String pwd,
                                          HttpServletRequest req,
-                                         HttpServletResponse res) throws IOException {
+                                         HttpServletResponse res) {
         Map<String, String> resultMap = new HashMap<>();
-
-        log.info("loginDTO : {}", loginDTO);
 
         if(loginDTO.getUser_id() == null || loginDTO.getUser_id().equals("") || loginDTO.getUser_id().length() == 0) {
             resultMap.put("state", "emptyId");
@@ -72,33 +70,37 @@ public class LoginController {
 
         MemberDTO memberDTO = loginService.login(loginDTO.getUser_id(), loginDTO.getPwd());
 
+        log.info("memberDTO : {}", memberDTO);
+
         if(memberDTO != null) {
             // 5회 이상 로그인 실패
             if(memberDTO.getFail_cnt() > 5) {
                 resultMap.put("state", "lockedId");
-                resultMap.put("msg", "5회 이상 로그인 실패로 잠금 처리된 아이디입니다.\n 관리자에게 문의해 주세요.");
+                resultMap.put("msg", "5회 이상 로그인 실패로 잠금 처리된 아이디입니다.\r\n관리자에게 문의해 주세요.");
 
                 return resultMap;
             }
 
             // 마지막 로그인 날짜 확인
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, -6);
-            Date date = calendar.getTime();
+            if(memberDTO.getLast_login_date() != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MONTH, -6);
+                Date date = calendar.getTime();
 
-            LocalDate localDate = new java.sql.Date(date.getTime()).toLocalDate();
+                LocalDate localDate = new java.sql.Date(date.getTime()).toLocalDate();
 
-            if(memberDTO.getLast_login_date().isBefore(localDate)) {
-                resultMap.put("state", "longTime");
-                resultMap.put("msg", "6개월 이상 로그인 이력이 없습니다.\n관리자에게 문의해 주세요.");
+                if(memberDTO.getLast_login_date().isBefore(localDate)) {
+                    resultMap.put("state", "longTime");
+                    resultMap.put("msg", "6개월 이상 로그인 이력이 없습니다.\r\n관리자에게 문의해 주세요.");
 
-                return resultMap;
+                    return resultMap;
+                }
             }
 
             // member_state가 N일 때
             if(memberDTO.getMember_state().equals("N")) {
                 resultMap.put("state", "blockedId");
-                resultMap.put("msg", "관리자 또는 이용 규칙 위반에 의해 이용이 제한된 아이디입니다.\n관리자에게 문의해 주세요.");
+                resultMap.put("msg", "관리자 또는 이용 규칙 위반에 의해 이용이 제한된 아이디입니다.\r\n관리자에게 문의해 주세요.");
 
                 return resultMap;
             }
@@ -123,19 +125,25 @@ public class LoginController {
                 CookieUtil.setCookies("user_name", memberDTO.getName(), 60*60*24*7, res);
             }
 
-            // TODO: fail_cnt, last_login_date 수정
+            // fail_cnt, last_login_date 초기화
             loginService.updateLoginInfo(memberDTO.getUser_id());
+
+            if(memberDTO.getTemp_pwd().equals("Y")) {
+                resultMap.put("state", "tempPwd");
+                resultMap.put("msg", "비밀번호 변경 화면으로 이동합니다.");
+
+                return resultMap;
+            }
 
             resultMap.put("state", "success");
             resultMap.put("msg", "로그인 성공");
 
-            return resultMap;
         } else {
             resultMap.put("state", "noUser");
             resultMap.put("msg", "입력하신 아이디 또는 패스워드가 일치하지 않습니다.");
 
-            return resultMap;
         }
+        return resultMap;
     }
 
     @GetMapping("/logout")
@@ -149,5 +157,27 @@ public class LoginController {
         CookieUtil.deleteCookie("user_name", "", 0, res);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/findPwd")
+    public void findPwd() {
+    }
+
+    @ResponseBody
+    @PostMapping("/findPwd")
+    public String findPwd(String user_id) {
+        int result = loginService.findPwdCheck(user_id);
+
+        if(result > 0) {
+            String tempPwd = loginService.changeTempPwd(user_id);
+            return tempPwd;
+        } else {
+            return "fail";
+        }
+    }
+
+    @GetMapping("/changePwd")
+    public void changePwd() {
+
     }
 }

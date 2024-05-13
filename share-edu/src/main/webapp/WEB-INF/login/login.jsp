@@ -6,13 +6,14 @@
     <title>로그인 페이지</title>
     <meta charset="UTF-8"/>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
 <%@include file="../common/header.jsp"%>
 <div id="snippetContent">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -52,7 +53,7 @@
                                         <button type="button" id="btnLogin" class="btn btn-primary px-4" onclick="loginCheck()">로그인</button>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <button type="button" class="btn btn-link px-0">아이디/비밀번호 찾기</button>
+                                        <button type="button" class="btn btn-link px-0" onclick="location.href='/login/findPwd'">비밀번호 찾기</button>
                                     </div>
 
                                 </div>
@@ -108,12 +109,34 @@
             type: "post",
             data: JSON.stringify(params),
             contentType: "application/json; charset=UTF-8",
-            success: function(result) {
-                alert(result.msg);
-                if(result.state == 'success') {
-                    window.location.href = "/";
-                } else {
-                    window.location.href = "/login/login";
+            success: function(resultMap) {
+                if(resultMap.state == "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "로그인 성공",
+                        text: resultMap.msg,
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.href = "/";
+                    });
+                } else if(resultMap.state == "tempPwd") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "비밀번호 변경이 필요합니다.",
+                        text: resultMap.msg,
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.href = "/login/changePwd";
+                    });
+                }else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "로그인 실패",
+                        text: resultMap.msg,
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.href = "/login/login";
+                    });
                 }
             }
         });

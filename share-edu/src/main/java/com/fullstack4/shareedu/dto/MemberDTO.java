@@ -41,4 +41,5 @@ public class MemberDTO {
     private int fail_cnt;
     private LocalDate last_login_date;
     private String member_state;
+    private String temp_pwd;
 }

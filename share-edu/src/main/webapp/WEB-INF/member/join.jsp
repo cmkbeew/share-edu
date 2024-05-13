@@ -75,18 +75,27 @@
     serverValidResult['${err.getField()}'] = '${err.defaultMessage}';
     </c:forEach>
 
+    function swal(msg) {
+        Swal.fire({
+            icon: "error",
+            title: "중복확인 실패",
+            text: msg,
+            confirmButtonColor: "#3085d6"
+        });
+    }
+
     function duplicateId() {
         let user_id = $('#user_id').val();
         const idRegexp = /^[a-z0-9]{4,12}/;
 
         if(user_id == '' || user_id.length == 0 || user_id == null) {
             $('#user_id').focus();
-            alert("아이디를 입력하세요");
+            swal("아이디를 입력하세요.");
             return;
         }
         if(!idRegexp.test(user_id)) {
             $('#user_id').focus();
-            alert("4~12자 이내의 영어 소문자 및 숫자만 입력이 가능합니다.");
+            swal("4~12자 이내의 영어 소문자 및 숫자만 입력이 가능합니다.");
             return;
         }
 
@@ -99,13 +108,23 @@
             success: function(result) {
                 if(result == "idCheck") {
                     $('#user_id').focus();
-                    alert("이미 가입된 아이디입니다.");
+                    swal("이미 가입된 아이디입니다.");
+
                 } else if(result == "pass") {
-                    const flag = confirm("사용가능한 아이디입니다.\r\n사용하시겠습니까?");
-                    if(flag) {
-                        $('#user_id_check').attr("disabled", true);
-                        $('#user_id').attr("readonly", true);
-                    }
+                    Swal.fire({
+                        title: "사용가능한 아이디입니다.\r\n사용하시겠습니까?",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "사용",
+                        cancelButtonText: "취소"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#user_id_check').attr("disabled", true);
+                            $('#user_id').attr("readonly", true);
+                        }
+                    });
                 }
             }
         });
@@ -117,12 +136,12 @@
 
         if(email == '' || email.length == 0 || email == null) {
             $('#email').focus();
-            alert("이메일을 입력하세요");
+            swal("이메일을 입력하세요.");
             return;
         }
         if(!emailRegexp.test(email)) {
             $('#email').focus();
-            alert("이메일 형식에 맞춰 입력하세요.");
+            swal("이메일 형식에 맞춰 입력하세요.");
             return;
         }
 
@@ -135,13 +154,22 @@
             success: function(result) {
                 if(result == "emailCheck") {
                     $('#email').focus();
-                    alert("이미 가입된 이메일입니다.");
+                    swal("이미 가입된 이메일입니다.");
                 } else if(result == "pass") {
-                    const flag = confirm("사용가능한 이메일입니다.\r\n사용하시겠습니까?");
-                    if(flag) {
-                        $('#email_check').attr("disabled", true);
-                        $('#email').attr("readonly", true);
-                    }
+                    Swal.fire({
+                        title: "사용가능한 이메일입니다.\r\n사용하시겠습니까?",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "사용",
+                        cancelButtonText: "취소"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#email_check').attr("disabled", true);
+                            $('#email').attr("readonly", true);
+                        }
+                    });
                 }
             }
         });
@@ -152,9 +180,11 @@
         if($('#user_id_check').prop("disabled") && $('#email_check').prop("disabled")) {
             frm.submit();
         }else {
-            alert("중복 확인을 완료해주세요.");
+            swal("중복 확인을 완료해주세요.");
         }
     });
+
+
 </script>
 </body>
 </html>
