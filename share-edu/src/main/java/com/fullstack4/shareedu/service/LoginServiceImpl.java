@@ -58,4 +58,18 @@ public class LoginServiceImpl implements LoginService{
 
         return result;
     }
+
+    @Override
+    public String pwdCheck(String user_id) {
+        String old_pwd = loginMapper.pwdCheck(user_id);
+
+        return old_pwd;
+    }
+
+    @Override
+    public int changePwd(String user_id, String pwd) {
+        int result = loginMapper.changePwd(user_id, pwd);
+
+        return result;
+    }
 }

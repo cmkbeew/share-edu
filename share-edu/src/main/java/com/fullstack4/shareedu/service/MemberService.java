@@ -9,6 +9,8 @@ public interface MemberService {
 
     int join(MemberDTO memberDTO);
 
+    MemberDTO mypage(String user_id);
+
     int modify(MemberDTO memberDTO);
 
     int delete(String user_id);

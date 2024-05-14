@@ -20,8 +20,8 @@
         VALUES (#{user_id}, #{pwd}, #{name}, #{email}, #{phone})
     </insert>
 
-    <select id="view" resultType="com.fullstack4.shareedu.domain.MemberVO">
-        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state
+    <select id="mypage" resultType="com.fullstack4.shareedu.domain.MemberVO">
+        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state, temp_pwd
         FROM tbl_member
         WHERE user_id = #{user_id}
     </select>

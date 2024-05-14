@@ -46,11 +46,22 @@
                                     </div>
                                     <div id="div_err_email" style="display: none"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="phone">휴대폰번호</label>
-                                    <input class="form-control form-control-lg" type="text" name="phone" id="phone" value="${memberDTO.phone}" placeholder="Enter your Phone" maxlength="11">
-                                    <div id="div_err_phone" style="display: none"></div>
+
+                                <label>휴대폰번호</label>
+                                <div class="form-group d-flex justify-content-evenly">
+                                    <select class="form-select form-select-lg me-2" name="phone1" id="phone1">
+                                        <option value="010" <c:if test="${memberDTO.phone1 == '010'}">selected</c:if>>010</option>
+                                        <option value="011" <c:if test="${memberDTO.phone1 == '011'}">selected</c:if>>011</option>
+                                        <option value="016" <c:if test="${memberDTO.phone1 == '016'}">selected</c:if>>016</option>
+                                        <option value="017" <c:if test="${memberDTO.phone1 == '017'}">selected</c:if>>017</option>
+                                        <option value="018" <c:if test="${memberDTO.phone1 == '018'}">selected</c:if>>018</option>
+                                    </select>
+                                    <input class="form-control form-control-lg me-2" type="text" name="phone2" id="phone2" value="${memberDTO.phone2}" maxlength="4">
+                                    <input class="form-control form-control-lg me-2" type="text" name="phone3" id="phone3" value="${memberDTO.phone3}" maxlength="4">
                                 </div>
+                                <div id="div_err_phone1" style="display: none"></div>
+                                <div id="div_err_phone2" style="display: none"></div>
+                                <div id="div_err_phone3" style="display: none"></div>
 
                                 <div class="text-center mt-3">
                                     <button type="button" id="registBtn" class="btn btn-lg btn-primary">회원가입</button>
@@ -132,7 +143,7 @@
 
     function duplicateEmail() {
         let email = $('#email').val();
-        const emailRegexp = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+        const emailRegexp = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/;
 
         if(email == '' || email.length == 0 || email == null) {
             $('#email').focus();
@@ -183,8 +194,6 @@
             swal("중복 확인을 완료해주세요.");
         }
     });
-
-
 </script>
 </body>
 </html>

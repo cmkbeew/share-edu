@@ -31,4 +31,15 @@
         SELECT count(*) FROM tbl_member
         WHERE user_id = #{user_id}
     </select>
+
+    <select id="pwdCheck">
+        SELECT pwd FROM tbl_member
+        WHERE user_id = #{user_id}
+    </select>
+
+    <update id="changePwd">
+        UPDATE tbl_member
+        SET pwd = #{pwd}, temp_pwd = 'N'
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>

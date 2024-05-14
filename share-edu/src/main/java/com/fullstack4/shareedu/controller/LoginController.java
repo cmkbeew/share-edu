@@ -49,8 +49,6 @@ public class LoginController {
     @ResponseBody
     @PostMapping("/login")
     public Map<String, String> loginPOST(@RequestBody LoginDTO loginDTO,
-//                                         @RequestParam(name = "user_id") String user_id,
-//                                         @RequestParam(name = "pwd") String pwd,
                                          HttpServletRequest req,
                                          HttpServletResponse res) {
         Map<String, String> resultMap = new HashMap<>();
@@ -105,6 +103,13 @@ public class LoginController {
                 return resultMap;
             }
 
+            if(memberDTO.getTemp_pwd().equals("Y")) {
+                resultMap.put("state", "tempPwd");
+                resultMap.put("msg", "비밀번호 변경 화면으로 이동합니다.");
+
+                return resultMap;
+            }
+
             // 세션에 로그인 유저 정보 넣기
             HttpSession session = req.getSession();
             session.setAttribute("user_id", memberDTO.getUser_id());
@@ -127,13 +132,6 @@ public class LoginController {
 
             // fail_cnt, last_login_date 초기화
             loginService.updateLoginInfo(memberDTO.getUser_id());
-
-            if(memberDTO.getTemp_pwd().equals("Y")) {
-                resultMap.put("state", "tempPwd");
-                resultMap.put("msg", "비밀번호 변경 화면으로 이동합니다.");
-
-                return resultMap;
-            }
 
             resultMap.put("state", "success");
             resultMap.put("msg", "로그인 성공");
@@ -177,7 +175,23 @@ public class LoginController {
     }
 
     @GetMapping("/changePwd")
-    public void changePwd() {
+    public void changePwd(String user_id, Model model) {
+        String old_pwd = loginService.pwdCheck(user_id);
+
+        model.addAttribute("user_id", user_id);
+        model.addAttribute("pwd", old_pwd);
+    }
+
+    @PostMapping("/changePwd")
+    public String changePwd(String user_id, @RequestParam(name = "new_pwd") String pwd, RedirectAttributes redirectAttributes) {
+        int result = loginService.changePwd(user_id, pwd);
+
+        if(result > 0) {
+            return "redirect:/login/login";
+        } else {
+            return "redirect:/login/changePwd?user_id=" + user_id;
+        }
 
     }
+
 }

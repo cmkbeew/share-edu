@@ -13,4 +13,8 @@ public interface LoginMapper {
     void changeTempPwd(@Param(value = "user_id") String user_id, @Param(value = "pwd") String pwd);
 
     int findPwdCheck(String user_id);
+
+    String pwdCheck(String user_id);
+
+    int changePwd(@Param(value = "user_id") String user_id, @Param(value = "pwd") String pwd);
 }

@@ -78,9 +78,11 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/view")
-    public void view(@RequestParam(name="user_id", defaultValue = "") String user_id,
-                     Model model) {
+    @GetMapping("/mypage")
+    public void mypage(String user_id, Model model) {
+        MemberDTO memberDTO = memberService.mypage(user_id);
+
+        model.addAttribute("memberDTO", memberDTO);
     }
 
     @GetMapping("/modify")

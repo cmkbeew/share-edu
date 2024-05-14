@@ -40,6 +40,15 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public MemberDTO mypage(String user_id) {
+        MemberVO vo = memberMapper.mypage(user_id);
+
+        MemberDTO dto = modelMapper.map(vo, MemberDTO.class);
+
+        return dto;
+    }
+
+    @Override
     public int modify(MemberDTO memberDTO) {
         return 0;
     }

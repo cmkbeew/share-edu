@@ -26,7 +26,7 @@
         <div class="col-md-3 text-end">
             <c:if test="${sessionScope.user_id != null}">
                 <button type="button" class="btn btn-outline-primary me-2" onclick="location.href='/login/logout'">로그아웃</button>
-                <button type="button" class="btn btn-primary" onclick="location.href='/member/view?user_id=${sessionScope.user_id}'">마이페이지</button>
+                <button type="button" class="btn btn-primary" onclick="location.href='/member/mypage?user_id=${sessionScope.user_id}'">마이페이지</button>
             </c:if>
             <c:if test="${sessionScope.user_id == null}">
                 <button type="button" class="btn btn-outline-primary me-2" onclick="location.href='/login/login'">로그인</button>

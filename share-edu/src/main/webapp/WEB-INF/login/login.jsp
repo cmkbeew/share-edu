@@ -126,7 +126,7 @@
                         text: resultMap.msg,
                         confirmButtonColor: "#3085d6"
                     }).then(() => {
-                        window.location.href = "/login/changePwd";
+                        window.location.href = "/login/changePwd?user_id="+user_id;
                     });
                 }else {
                     Swal.fire({
