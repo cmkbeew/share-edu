@@ -68,8 +68,6 @@ public class LoginController {
 
         MemberDTO memberDTO = loginService.login(loginDTO.getUser_id(), loginDTO.getPwd());
 
-        log.info("memberDTO : {}", memberDTO);
-
         if(memberDTO != null) {
             // 5회 이상 로그인 실패
             if(memberDTO.getFail_cnt() > 5) {
@@ -112,6 +110,7 @@ public class LoginController {
 
             // 세션에 로그인 유저 정보 넣기
             HttpSession session = req.getSession();
+            session.setAttribute("member_idx", memberDTO.getMember_idx());
             session.setAttribute("user_id", memberDTO.getUser_id());
             session.setAttribute("name", memberDTO.getName());
             session.setAttribute("email", memberDTO.getEmail());

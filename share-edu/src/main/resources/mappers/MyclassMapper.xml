@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fullstack4.shareedu.mapper.MyclassMapper">
+
+    <insert id="regist">
+        INSERT INTO tbl_class(title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, share_id, member_idx)
+        VALUES (#{title}, #{content}, #{org_file_name}, #{save_file_name}, #{display_state}, #{display_start}, #{display_end}, #{category}, #{tag}, #{share_id}, #{member_idx})
+    </insert>
+
+    <select id="searchMember" resultType="com.fullstack4.shareedu.domain.MemberVO">
+        SELECT member_idx, user_id, name, phone, email
+        FROM tbl_member
+        WHERE user_id != #{user_id}
+        AND (user_id like concat('%', #{search_word}, '%') OR name like concat('%', #{search_word}, '%'))
+        ORDER BY member_idx DESC
+    </select>
+</mapper>

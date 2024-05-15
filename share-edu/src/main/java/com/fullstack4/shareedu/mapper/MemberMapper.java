@@ -11,6 +11,7 @@ public interface MemberMapper {
     int join(MemberVO memberVO);
 
     MemberVO mypage(String user_id);
+
     int modify(MemberVO memberVO);
 
     int delete(String user_id);

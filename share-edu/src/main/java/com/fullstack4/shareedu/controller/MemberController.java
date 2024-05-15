@@ -1,6 +1,7 @@
 package com.fullstack4.shareedu.controller;
 
 import com.fullstack4.shareedu.dto.MemberDTO;
+import com.fullstack4.shareedu.dto.MypageDTO;
 import com.fullstack4.shareedu.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -85,15 +86,12 @@ public class MemberController {
         model.addAttribute("memberDTO", memberDTO);
     }
 
-    @GetMapping("/modify")
-    public void modifyGET(@RequestParam(name="user_id", defaultValue = "") String user_id,
-                          Model model) {
-    }
+    @PostMapping("/mypage")
+    public String mypage(MemberDTO memberDTO) {
 
-    @PostMapping("/modify")
-    public String modifyPOST() {
-            return null;
+        log.info("memberDTO : {}", memberDTO);
 
+        return null;
     }
 
     @PostMapping("/delete")
