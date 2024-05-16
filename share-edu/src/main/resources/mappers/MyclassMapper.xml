@@ -3,17 +3,151 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fullstack4.shareedu.mapper.MyclassMapper">
+    <sql id="whereCondition">
+        <if test="search_type != null">
+            <foreach collection="search_type" item="type" open="AND (" close=")" separator=" OR ">
+                <trim prefixOverrides="AND">
+                    <if test="type == 'title'">
+                        AND title LIKE concat('%', #{search_word}, '%')
+                    </if>
+                    <if test="type == 'content'">
+                        AND content LIKE concat('%', #{search_word}, '%')
+                    </if>
+                </trim>
+            </foreach>
+        </if>
+        <if test="search_date1 != null">
+            AND reg_date <![CDATA[>=]]> #{search_date1}
+        </if>
+        <if test="search_date2 != null">
+            AND reg_date <![CDATA[<=]]> #{search_date2}
+        </if>
+    </sql>
+
+    <select id="myclass">
+        SELECT edu_idx, title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, like_cnt, reg_date, modify_date, member_idx
+        FROM tbl_class
+        WHERE member_idx = #{member_idx}
+        <include refid="whereCondition"></include>
+        ORDER BY edu_idx DESC
+        LIMIT #{page_skip_count}, #{page_size}
+    </select>
+
+    <select id="myclassCount">
+        SELECT COUNT(*) FROM tbl_class
+        WHERE member_idx = #{member_idx}
+        <include refid="whereCondition"></include>
+    </select>
 
     <insert id="regist">
-        INSERT INTO tbl_class(title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, share_id, member_idx)
-        VALUES (#{title}, #{content}, #{org_file_name}, #{save_file_name}, #{display_state}, #{display_start}, #{display_end}, #{category}, #{tag}, #{share_id}, #{member_idx})
+        INSERT INTO tbl_class(title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, member_idx)
+        VALUES (#{title}, #{content}, #{org_file_name}, #{save_file_name}, #{display_state}, #{display_start}, #{display_end}, #{category}, #{tag}, #{member_idx})
     </insert>
+
+    <select id="selectAllMember">
+        SELECT member_idx, user_id, pwd, name, email, phone, reg_date, fail_cnt, last_login_date, member_state, temp_pwd
+        FROM tbl_member
+        WHERE member_idx != #{member_idx}
+        ORDER BY member_idx DESC
+    </select>
 
     <select id="searchMember" resultType="com.fullstack4.shareedu.domain.MemberVO">
         SELECT member_idx, user_id, name, phone, email
         FROM tbl_member
         WHERE user_id != #{user_id}
-        AND (user_id like concat('%', #{search_word}, '%') OR name like concat('%', #{search_word}, '%'))
+          AND (user_id like concat('%', #{search_word}, '%') OR name like concat('%', #{search_word}, '%'))
         ORDER BY member_idx DESC
+    </select>
+
+    <select id="findClassIdx">
+        SELECT LAST_INSERT_ID(edu_idx) FROM tbl_class ORDER BY edu_idx DESC LIMIT 1
+    </select>
+
+    <insert id="shareClass">
+        INSERT INTO tbl_share (edu_idx, share_user_id, shared_id)
+        VALUES (#{edu_idx}, #{share_user_id}, #{shared_id})
+    </insert>
+
+    <select id="selectOne">
+        SELECT edu_idx, title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, like_cnt, reg_date, modify_date, member_idx
+        FROM tbl_class
+        WHERE member_idx = #{member_idx}
+        ORDER BY reg_date DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectSharedId">
+        select shared_id
+        FROM tbl_share AS ts INNER JOIN tbl_class AS tc ON tc.edu_idx = ts.edu_idx
+        WHERE ts.edu_idx = #{edu_idx}
+    </select>
+
+    <select id="receiveClass">
+        SELECT ts.share_user_id, tc.org_file_name, tc.save_file_name, tc.like_cnt
+        FROM tbl_share AS ts INNER JOIN tbl_class AS tc ON tc.edu_idx = ts.edu_idx
+        WHERE ts.shared_id = #{user_id}
+        ORDER BY tc.reg_date DESC
+            LIMIT 4
+    </select>
+
+    <select id="view">
+        SELECT edu_idx, title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, like_cnt, reg_date, modify_date, member_idx
+        FROM tbl_class
+        WHERE edu_idx = #{edu_idx}
+    </select>
+
+    <update id="modify">
+        UPDATE tbl_class SET
+        title = #{title},
+        content = #{content},
+        org_file_name = #{org_file_name},
+        save_file_name = #{save_file_name},
+        display_state = #{display_state},
+        display_start = #{display_start},
+        display_end = #{display_end},
+        category = #{category},
+        tag = #{tag},
+        modify_date = NOW()
+        WHERE edu_idx = #{edu_idx}
+    </update>
+
+    <delete id="deleteSharedId">
+        DELETE FROM tbl_share
+        WHERE edu_idx = #{edu_idx}
+    </delete>
+
+    <delete id="delete">
+        DELETE FROM tbl_class
+        WHERE edu_idx = #{edu_idx}
+    </delete>
+
+    <select id="shareList">
+        SELECT
+        tc.edu_idx, tc.title, tc.content, tc.org_file_name, tc.save_file_name, tc.display_state, tc.display_start, tc.display_end, tc.category, tc.tag, tc.like_cnt, tc.reg_date, tc.modify_date, tc.member_idx,
+        ts.share_idx, ts.share_user_id, ts.shared_id
+        FROM tbl_class AS tc
+        INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
+        INNER JOIN tbl_member AS tm ON tm.member_idx = tc.member_idx
+        <if test="type == 'send'">
+            WHERE tc.member_idx = #{member_idx} AND ts.share_user_id = #{user_id}
+--             GROUP BY tc.edu_idx
+        </if>
+        <if test="type == 'receive'">
+            WHERE ts.shared_id = #{user_id}
+        </if>
+        ORDER BY ts.share_idx DESC
+    </select>
+
+    <select id="shareCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM tbl_class AS tc
+        INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
+        INNER JOIN tbl_member AS tm ON tm.member_idx = tc.member_idx
+        <if test="type == 'send'">
+            WHERE tc.member_idx = #{member_idx} AND ts.share_user_id = #{user_id}
+        </if>
+        <if test="type == 'receive'">
+            WHERE ts.shared_id = #{user_id}
+        </if>
     </select>
 </mapper>

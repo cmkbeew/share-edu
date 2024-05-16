@@ -26,7 +26,7 @@ public class MyclassVO {
     private String like_cnt;
     private LocalDate reg_date;
     private LocalDate modify_date;
-
-    private String share_id;
     private int member_idx;
+    private String user_id;
+    private String[] shared_id;
 }

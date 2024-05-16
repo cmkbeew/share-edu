@@ -19,12 +19,13 @@
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <li><a href="/" class="nav-link px-2 link-dark" style="font-size: 20px;">Home</a></li>
-            <li><a href="/myclass/home?user_id=${sessionScope.user_id}" class="nav-link px-2 link-dark" style="font-size: 20px;">My Class</a></li>
+            <li><a href="/myclass/home?member_idx=${sessionScope.member_idx}" class="nav-link px-2 link-dark" style="font-size: 20px;">My Class</a></li>
 <%--            <li><a href="#" class="nav-link px-2 link-secondary">Features</a></li>--%>
         </ul>
 
         <div class="col-md-3 text-end">
             <c:if test="${sessionScope.user_id != null}">
+                <span class="me-2">${sessionScope.name}님</span>
                 <button type="button" class="btn btn-outline-primary me-2" onclick="location.href='/login/logout'">로그아웃</button>
                 <button type="button" class="btn btn-primary" onclick="location.href='/member/mypage?user_id=${sessionScope.user_id}'">마이페이지</button>
             </c:if>

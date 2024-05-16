@@ -17,7 +17,7 @@
 <c:if test="${not noLogin}">
     <a href="/login/logout">로그아웃</a>
     <a href="/member/mypage?user_id=${sessionScope.user_id}">내정보수정</a>
-    <a href="/myclass/home?user_id=${sessionScope.user_id}">My Class</a>
+    <a href="/myclass/home?member_idx=${sessionScope.member_idx}">My Class</a>
 </c:if>
 ${sessionScope.user_id}
 ${sessionScope.name}

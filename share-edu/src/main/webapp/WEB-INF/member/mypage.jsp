@@ -73,7 +73,7 @@
 
                                 <div class="d-flex justify-content-lg-evenly mt-3">
                                     <button type="submit" id="modifyBtn" class="btn btn-lg btn-primary w-25">수정</button>
-                                    <button type="button" id="cancelBtn" class="btn btn-lg btn-primary w-25">취소</button>
+                                    <button type="button" id="cancelBtn" class="btn btn-lg btn-primary w-25" onclick="location.href='/'">취소</button>
                                 </div>
                             </form>
                         </div>

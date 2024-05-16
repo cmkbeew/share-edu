@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <html>
@@ -18,14 +19,22 @@
                 <div class="mx-3">
                     <input class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search" name="search_word" id="search_word" value="">
                 </div>
-                <button class="btn-lg btn-primary" type="button" id="btn_search" onclick="searchMember()">검색</button>
+                <button class="btn-lg btn-primary me-3" type="button" id="btn_search" onclick="searchMember()">검색</button>
+                <button class="btn-lg btn-primary" type="reset" id="btn_reset" onclick="searchMember()">초기화</button>
             </div>
         </form>
     </div>
     <div class="mb-3">
         <form>
             <ul id="searchList" class="list-group list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-start"></li>
+                <c:forEach items="${memberList}" var="list">
+                <li class='list-group-item d-flex justify-content-between align-items-center'>
+                    <input type='checkbox' name='checkList' id='${list.member_idx}' value='${list.user_id}'>
+                    <div>${list.user_id}</div>
+                    <div>${list.name}</div>
+                    <div>${list.email}</div>
+                </li>
+                </c:forEach>
             </ul>
             <button type="button" class="btn-lg btn-primary mt-3" onclick="selectMember()">공유</button>
         </form>
@@ -51,12 +60,11 @@
                 data: {search_word: search_word},
                 success: function (result) {
                     $('#searchList').empty();
-                    console.log(result);
                     if (result.length != 0) {
                         $(result).each(function () {
                             $('#searchList').append(
                                 "<li class='list-group-item d-flex justify-content-between align-items-center'>"
-                                + "<input type='checkbox' name='checkList' id='" + this.member_idx + "' value='" + this.member_idx + "'>"
+                                + "<input type='checkbox' name='checkList' id='" + this.member_idx + "' value='" + this.user_id + "'>"
                                 + "<div>" + this.user_id + "</div>"
                                 + "<div>" + this.name + "</div>"
                                 + "<div>" + this.email + "</div>"

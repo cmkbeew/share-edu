@@ -8,77 +8,58 @@
 <%@include file="../common/header.jsp"%>
 
 <div class="container px-4 py-5">
-    <div class="d-flex border-bottom">
-        <h2 class="me-3">오늘의 학습</h2>
-        <ul class="nav nav-pills rounded-pill align-items-center">
-            <li class="nav-item">
-                <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" id="all-category">
-                    <span class="d-none d-md-block">나의 학습</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="javascript:void(0)" class="nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2" id="note-business">
-                    <span class="d-none d-md-block">공유 학습</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <%@include file="../common/classHeader.jsp"%>
 
     <div class="row row-cols-1 row-cols-md-2 align-items-md-center py-5">
-        <div class="col d-flex align-items-start border rounded">
-            <img src="/resources/img/myclass/exam01.png" class="me-4 my-3" width="300" height="450"/>
-            <div class="d-flex flex-column">
-                <div class="border my-3 text-center">제목</div>
-                <div class="my-3">Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</div>
-                <div class="my-3">분야</div>
-                <div class="my-3">태그</div>
-                <div class="my-3">공유한 사람</div>
-            </div>
+        <div class="col d-flex align-items-start justify-content-between border rounded">
+            <c:if test="${not empty myclassDTO}">
+                <img src="/resources/img/myclass/${myclassDTO.save_file_name}" class="me-4 my-3 border rounded" width="300" height="450"/>
+                <div class="d-flex flex-column" style="margin: 0 auto;">
+                    <label>제목</label>
+                    <div class="border p-2 mb-3 text-center">${myclassDTO.title}</div>
+                    <label>내용</label>
+                    <p class="border p-2 mb-3">${myclassDTO.content}</p>
+                    <label>분야</label>
+                    <div class="border p-2 mb-3">${myclassDTO.category}</div>
+                    <label>해시태그</label>
+                    <div class="border p-2 mb-3">${myclassDTO.tag}</div>
+                    <label>공유한 사람</label>
+                    <ul class="border p-2">
+                        <c:forEach items="${shareList}" var="list">
+                            <li class="list-group mb-3">${list}</li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </c:if>
+            <c:if test="${empty myclassDTO}">
+                <div>등록된 학습이 없습니다.</div>
+            </c:if>
         </div>
         <div class="col">
-            <h4 class="text-center">공유학습</h4>
-            <div class="row row-cols-1 row-cols-sm-2">
-
-                <div class="col d-flex flex-column mb-2">
-                    <div class="d-inline-flex flex-column align-items-center rounded">
-                        <img src="/resources/img/myclass/exam01.png" width="200" height="250" />
-                        <div class="d-flex justify-content-between">
-                            <div class="">좋아요</div>
-                            <div class="">ㅇㅇㅇ님</div>
+            <h4 class="text-center">공유받은 학습</h4>
+            <c:if test="${not empty receiveList}">
+                <div class="row row-cols-1 row-cols-sm-2">
+                    <c:forEach items="${receiveList}" var="list">
+                        <div class="col d-flex flex-column mb-2">
+                            <div class="d-inline-flex flex-column align-items-center rounded">
+                                <img src="/resources/img/myclass/${list.save_file_name}" width="200" height="250" />
+                                <div class="d-flex justify-content-between" style="width: 200px; font-size: 20px">
+                                    <div class="d-flex align-items-center">
+                                        <img src="/resources/img/balloon-heart-fill.svg" width="30"/>
+                                        <div class="">${list.like_cnt}</div>
+                                    </div>
+                                    <div class="">${list.share_user_id}님</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </c:forEach>
                 </div>
-
-                <div class="col d-flex flex-column">
-                    <div class="d-inline-flex flex-column align-items-center rounded">
-                        <img src="/resources/img/myclass/exam01.png" width="200" height="250" />
-                        <div class="d-flex justify-content-between">
-                            <div class="">좋아요</div>
-                            <div class="">ㅇㅇ님</div>
-                        </div>
-                    </div>
+            </c:if>
+            <c:if test="${empty receiveList}">
+                <div class="col mb-2 text-center">
+                    공유 받은 학습이 없습니다.
                 </div>
-
-                <div class="col d-flex flex-column">
-                    <div class="d-inline-flex flex-column align-items-center rounded">
-                        <img src="/resources/img/myclass/exam01.png" width="200" height="250" />
-                        <div class="d-flex justify-content-between">
-                            <div class="">좋아요</div>
-                            <div class="">ㅇㅇㅇ님</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col d-flex flex-column">
-                    <div class="d-inline-flex flex-column align-items-center rounded">
-                        <img src="/resources/img/myclass/exam01.png" width="200" height="250" />
-                        <div class="d-flex justify-content-between">
-                            <div class="">좋아요</div>
-                            <div class="">ㅇㅇㅇㅇ님</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </c:if>
         </div>
     </div>
 </div>
