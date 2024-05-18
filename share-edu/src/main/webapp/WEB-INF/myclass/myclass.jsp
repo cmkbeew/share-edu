@@ -86,8 +86,8 @@
                 </tr>
             </thead>
             <tbody>
+            <c:if test="${not empty responseDTO.dtoList}">
                 <c:forEach var="list" items="${responseDTO.dtoList}">
-
                     <tr class="text-center">
                         <td>${list.edu_idx}</td>
                         <td class="text-start"><a href="/myclass/view?edu_idx=${list.edu_idx}" class="text-decoration-none">${list.title}</a></td>
@@ -97,6 +97,12 @@
                         <td>${list.display_start} ~ ${list.display_end}</td>
                     </tr>
                 </c:forEach>
+            </c:if>
+            <c:if test="${empty responseDTO.dtoList}">
+                <tr>
+                    <td colspan="6" class="text-center">등록한 학습이 없습니다.</td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
     </div>

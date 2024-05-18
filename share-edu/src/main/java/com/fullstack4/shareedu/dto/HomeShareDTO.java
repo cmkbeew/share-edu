@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HomeShareDTO {
+    private int edu_idx;
     private String org_file_name;
     private String save_file_name;
     private String share_user_id;

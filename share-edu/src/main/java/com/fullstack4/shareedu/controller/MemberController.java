@@ -66,6 +66,8 @@ public class MemberController {
             return "redirect:/member/join";
         }
 
+        memberDTO.setPhone(memberDTO.getPhone1(), memberDTO.getPhone2(), memberDTO.getPhone3());
+
         if(memberDTO != null) {
             int result = memberService.join(memberDTO);
 
@@ -82,6 +84,9 @@ public class MemberController {
     @GetMapping("/mypage")
     public void mypage(String user_id, Model model) {
         MemberDTO memberDTO = memberService.mypage(user_id);
+        memberDTO.setPhone1(memberDTO.getPhone().substring(0, 3));
+        memberDTO.setPhone2(memberDTO.getPhone().substring(3, 7));
+        memberDTO.setPhone3(memberDTO.getPhone().substring(7));
 
         model.addAttribute("memberDTO", memberDTO);
     }

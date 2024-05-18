@@ -26,7 +26,7 @@
 <div class="container px-4 py-5">
     <%@include file="/WEB-INF/common/classHeader.jsp"%>
     <div id="top" class="mt-4">
-        <form id="frmSearch" name="frmSearch" method="get" action="/myclass/shareList">
+        <form id="frmSearch" name="frmSearch" method="get" action="/myclass/receiveList">
             <input type="hidden" name="member_idx" value="${sessionScope.member_idx}">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="mx-5 my-3">

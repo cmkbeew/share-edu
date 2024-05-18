@@ -45,7 +45,7 @@
         </div>
         <div id="div_err_display_state" style="display: none;"></div>
 
-        <div id="display_date" class="mb-3" style="display: none;">
+        <div id="display_date" class="mb-3" style="display: <c:out value="${myclassDTO.display_state == (\"Y\") ? '' : 'none'}"></c:out>">
             <span>오늘의 학습 노출 기간 </span>
             <div class="d-flex align-items-center">
             <input type="date" class="form-control w-25" name="display_start" id="display_start" value="${myclassDTO.display_start}" />
@@ -54,6 +54,7 @@
             </div>
             <div id="div_err_display_start" style="display: none;"></div>
             <div id="div_err_display_end" style="display: none;"></div>
+            <div id="div_err_display_date" style="display: none;"></div>
         </div>
 
         <div class="mb-3">
@@ -79,7 +80,7 @@
         </div>
 
         <div class="d-grid gap-2">
-            <button class="btn btn-primary" type="submit">학습 등록</button>
+            <button class="btn btn-primary" type="submit" id="registBtn">학습 등록</button>
             <button class="btn btn-secondary" type="button" onclick="location.href='/myclass/home?member_idx=${sessionScope.member_idx}'">오늘의 학습</button>
         </div>
     </form>
@@ -136,6 +137,23 @@
     $('#display_n').on("click", function() {
         $('#display_date').attr("style", "display:none");
     });
+
+
+    document.getElementById("registBtn").addEventListener("click", function(e) {
+       e.preventDefault();
+       e.stopPropagation();
+
+        let divErr = document.getElementById("div_err_display_date");
+        let start = document.getElementById("display_start");
+        let end = document.getElementById("display_end");
+        if(start.value > end.value) {
+            divErr.innerHTML = "<span style='color:red;'>시작기간이 끝기간보다 늦습니다.</span>";
+            divErr.style.display = "block";
+        } else {
+            document.getElementById("frmRegist").submit();
+        }
+    });
+
 </script>
 
 <%@include file="../common/footer.jsp"%>

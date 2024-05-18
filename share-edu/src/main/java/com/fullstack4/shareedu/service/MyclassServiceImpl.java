@@ -180,4 +180,32 @@ public class MyclassServiceImpl implements MyclassService {
 
         return responseDTO;
     }
+
+    @Override
+    public String[] findSharedId(int edu_idx, String user_id) {
+        String[] shared_ids = myclassMapper.findSharedId(edu_idx, user_id);
+
+        return shared_ids;
+    }
+
+    @Override
+    public PageResponseDTO<ShareDTO> receiveList(PageRequestDTO pageRequestDTO) {
+        List<ShareDTO> shareList = myclassMapper.receiveList(pageRequestDTO);
+
+        for(ShareDTO dto : shareList) {
+            if(dto.getTitle().length() > 30) {
+                dto.setTitle(dto.getTitle().substring(0, 30) + "...");
+            }
+        }
+
+        int total_count = myclassMapper.receiveCount(pageRequestDTO);
+
+        PageResponseDTO<ShareDTO> responseDTO = PageResponseDTO.<ShareDTO>withAll()
+                .requestDTO(pageRequestDTO)
+                .dtoList(shareList)
+                .total_count(total_count)
+                .build();
+
+        return responseDTO;
+    }
 }

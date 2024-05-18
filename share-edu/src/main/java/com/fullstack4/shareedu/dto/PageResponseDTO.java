@@ -32,7 +32,6 @@ public class PageResponseDTO<E> {
     private LocalDate search_date2;
 
     private int member_idx;
-    private String type;
     private String user_id;
 
     private String linkParams;
@@ -54,7 +53,6 @@ public class PageResponseDTO<E> {
         this.next_page_flag = (this.total_page > this.page_block_end);
 
         this.member_idx = requestDTO.getMember_idx();
-        this.type = requestDTO.getType();
         this.user_id = requestDTO.getUser_id();
 
         this.dtoList = dtoList;
@@ -62,9 +60,6 @@ public class PageResponseDTO<E> {
         this.search_type = requestDTO.getSearch_type();
 
         StringBuilder sb = new StringBuilder();
-        if(type != null) {
-            sb.append("&type=" + type);
-        }
         if(search_type != null) {
             for(String type : search_type) {
                 sb.append("&search_type=" + type);

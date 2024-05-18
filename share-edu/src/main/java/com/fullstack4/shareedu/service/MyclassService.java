@@ -31,4 +31,7 @@ public interface MyclassService {
     int delete(int edu_idx);
 
     PageResponseDTO<ShareDTO> shareList(PageRequestDTO pageRequestDTO);
-}
+
+    String[] findSharedId(int edu_idx, String user_id);
+
+    PageResponseDTO<ShareDTO> receiveList(PageRequestDTO pageRequestDTO);}

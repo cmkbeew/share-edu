@@ -56,7 +56,6 @@ public class PageRequestDTO {
     private LocalDate search_date2;
 
     private int member_idx;
-    private String type;
     private String user_id;
 
 

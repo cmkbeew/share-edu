@@ -43,4 +43,10 @@ public interface MyclassMapper {
     List<ShareDTO> shareList(PageRequestDTO pageRequestDTO);
 
     int shareCount(PageRequestDTO pageRequestDTO);
+
+    String[] findSharedId(@Param(value = "edu_idx") int edu_idx, @Param(value = "user_id") String user_id);
+
+    List<ShareDTO> receiveList(PageRequestDTO pageRequestDTO);
+
+    int receiveCount(PageRequestDTO pageRequestDTO);
 }

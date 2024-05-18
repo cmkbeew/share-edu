@@ -13,8 +13,10 @@
     <div class="row row-cols-1 row-cols-md-2 align-items-md-center py-5">
         <div class="col d-flex align-items-start justify-content-between border rounded">
             <c:if test="${not empty myclassDTO}">
-                <img src="/resources/img/myclass/${myclassDTO.save_file_name}" class="me-4 my-3 border rounded" width="300" height="450"/>
-                <div class="d-flex flex-column" style="margin: 0 auto;">
+                <a href="/myclass/view?edu_idx=${myclassDTO.edu_idx}">
+                    <img src="/resources/img/myclass/${myclassDTO.save_file_name}" class="me-4 my-3 border rounded" width="300" height="450"/>
+                </a>
+                <div class="d-flex flex-column w-25" style="margin: 0 auto;">
                     <label>제목</label>
                     <div class="border p-2 mb-3 text-center">${myclassDTO.title}</div>
                     <label>내용</label>
@@ -37,12 +39,14 @@
         </div>
         <div class="col">
             <h4 class="text-center">공유받은 학습</h4>
-            <c:if test="${not empty receiveList}">
+            <c:if test="${not empty receiveClass}">
                 <div class="row row-cols-1 row-cols-sm-2">
-                    <c:forEach items="${receiveList}" var="list">
+                    <c:forEach items="${receiveClass}" var="list">
                         <div class="col d-flex flex-column mb-2">
                             <div class="d-inline-flex flex-column align-items-center rounded">
-                                <img src="/resources/img/myclass/${list.save_file_name}" width="200" height="250" />
+                                <a href="/myclass/view?edu_idx=${list.edu_idx}">
+                                    <img src="/resources/img/myclass/${list.save_file_name}" width="200" height="250" />
+                                </a>
                                 <div class="d-flex justify-content-between" style="width: 200px; font-size: 20px">
                                     <div class="d-flex align-items-center">
                                         <img src="/resources/img/balloon-heart-fill.svg" width="30"/>
@@ -55,7 +59,7 @@
                     </c:forEach>
                 </div>
             </c:if>
-            <c:if test="${empty receiveList}">
+            <c:if test="${empty receiveClass}">
                 <div class="col mb-2 text-center">
                     공유 받은 학습이 없습니다.
                 </div>

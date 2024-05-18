@@ -28,7 +28,7 @@ public class MemberDTO {
     private String pwd;
 
     @NotBlank(message = "이름을 입력하세요.")
-    @Pattern(regexp = "[가-힣a-zA-Z]{2,20}", message = "2~20자의 한글, 영어만 입력 가능합니다.")
+    @Pattern(regexp = "[가-힣a-zA-Z]{1,20}", message = "1~20자의 한글, 영어만 입력 가능합니다.")
     private String name;
 
     @NotBlank(message = "이메일을 입력하세요.")
@@ -37,7 +37,6 @@ public class MemberDTO {
 
     private String phone;
 
-    @NotBlank(message = "휴대폰 번호를 입력하세요.")
     private String phone1;
 
     @NotBlank(message = "휴대폰 가운데 번호를 입력하세요.")
@@ -55,20 +54,7 @@ public class MemberDTO {
     private String member_state;
     private String temp_pwd;
 
-    public String getPhone() {
-        return phone1+phone2+phone3;
-    }
-
-    public String getPhone1() {
-        String phone1 = this.phone.substring(0, 3);
-        return phone1;
-    }
-    public String getPhone2() {
-        String phone2 = this.phone.substring(3, 7);
-        return phone2;
-    }
-    public String getPhone3() {
-        String phone3 = this.phone.substring(7);
-        return phone3;
+    public void setPhone(String f, String s, String t) {
+        this.phone = (f+s+t);
     }
 }

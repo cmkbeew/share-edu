@@ -36,9 +36,9 @@ public class MyClassController {
             model.addAttribute("myclassDTO", myclassDTO);
             model.addAttribute("shareList", shareList);
         }
-        List<HomeShareDTO> receiveList = myclassService.receiveClass(req.getSession().getAttribute("user_id").toString());
+        List<HomeShareDTO> receiveClass = myclassService.receiveClass(req.getSession().getAttribute("user_id").toString());
 
-        model.addAttribute("receiveList", receiveList);
+        model.addAttribute("receiveClass", receiveClass);
     }
 
     @GetMapping("/regist")
@@ -184,14 +184,29 @@ public class MyClassController {
     }
 
     @GetMapping("/shareList")
-    public void shareList(int member_idx, String type, PageRequestDTO pageRequestDTO, HttpServletRequest req, Model model) {
+    public void shareList(int member_idx, PageRequestDTO pageRequestDTO, HttpServletRequest req, Model model) {
         pageRequestDTO.setMember_idx(member_idx);
-        pageRequestDTO.setType(type);
 
         String user_id = req.getSession().getAttribute("user_id").toString();
         pageRequestDTO.setUser_id(user_id);
 
         PageResponseDTO<ShareDTO> responseDTO = myclassService.shareList(pageRequestDTO);
+
+        log.info("responseDTO : {}", responseDTO);
+
+        model.addAttribute("responseDTO", responseDTO);
+    }
+
+    @GetMapping("/receiveList")
+    public void receiveList(int member_idx, PageRequestDTO pageRequestDTO, HttpServletRequest req, Model model) {
+        pageRequestDTO.setMember_idx(member_idx);
+
+        String user_id = req.getSession().getAttribute("user_id").toString();
+        pageRequestDTO.setUser_id(user_id);
+
+        PageResponseDTO<ShareDTO> responseDTO = myclassService.receiveList(pageRequestDTO);
+
+        log.info("responseDTO : {}", responseDTO);
 
         model.addAttribute("responseDTO", responseDTO);
     }

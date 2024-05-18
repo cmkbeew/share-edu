@@ -83,7 +83,7 @@
     </select>
 
     <select id="receiveClass">
-        SELECT ts.share_user_id, tc.org_file_name, tc.save_file_name, tc.like_cnt
+        SELECT ts.share_user_id, tc.org_file_name, tc.save_file_name, tc.like_cnt, tc.edu_idx
         FROM tbl_share AS ts INNER JOIN tbl_class AS tc ON tc.edu_idx = ts.edu_idx
         WHERE ts.shared_id = #{user_id}
         ORDER BY tc.reg_date DESC
@@ -122,32 +122,41 @@
     </delete>
 
     <select id="shareList">
-        SELECT
-        tc.edu_idx, tc.title, tc.content, tc.org_file_name, tc.save_file_name, tc.display_state, tc.display_start, tc.display_end, tc.category, tc.tag, tc.like_cnt, tc.reg_date, tc.modify_date, tc.member_idx,
-        ts.share_idx, ts.share_user_id, ts.shared_id
-        FROM tbl_class AS tc
-        INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
-        INNER JOIN tbl_member AS tm ON tm.member_idx = tc.member_idx
-        <if test="type == 'send'">
-            WHERE tc.member_idx = #{member_idx} AND ts.share_user_id = #{user_id}
---             GROUP BY tc.edu_idx
-        </if>
-        <if test="type == 'receive'">
-            WHERE ts.shared_id = #{user_id}
-        </if>
-        ORDER BY ts.share_idx DESC
+        SELECT edu_idx, title, content, org_file_name, save_file_name, display_state, display_start, display_end, category, tag, like_cnt, reg_date, modify_date, member_idx
+        FROM tbl_class
+        WHERE member_idx = #{member_idx}
+        <include refid="whereCondition"></include>
+        ORDER BY edu_idx DESC
+        LIMIT #{page_skip_count}, #{page_size}
     </select>
 
     <select id="shareCount" resultType="Integer">
         SELECT COUNT(*)
         FROM tbl_class AS tc
-        INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
-        INNER JOIN tbl_member AS tm ON tm.member_idx = tc.member_idx
-        <if test="type == 'send'">
-            WHERE tc.member_idx = #{member_idx} AND ts.share_user_id = #{user_id}
-        </if>
-        <if test="type == 'receive'">
-            WHERE ts.shared_id = #{user_id}
-        </if>
+        WHERE member_idx = #{member_idx}
+        <include refid="whereCondition"></include>
+    </select>
+
+    <select id="findSharedId">
+        SELECT ts.shared_id
+        FROM tbl_class AS tc INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
+        WHERE tc.edu_idx = #{edu_idx} AND ts.share_user_id = #{user_id}
+    </select>
+
+    <select id="receiveList">
+        SELECT tc.edu_idx, tc.title, tc.content, tc.org_file_name, tc.save_file_name, tc.display_state, tc.display_start, tc.display_end, tc.category, tc.tag,
+        tc.like_cnt, tc.reg_date, tc.modify_date, tc.member_idx, ts.share_idx, ts.share_user_id, ts.shared_id
+        FROM tbl_class AS tc INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
+        WHERE ts.shared_id = #{user_id}
+        <include refid="whereCondition"></include>
+        ORDER BY tc.edu_idx DESC
+        LIMIT #{page_skip_count}, #{page_size}
+    </select>
+
+    <select id="receiveCount">
+        SELECT COUNT(*)
+        FROM tbl_class AS tc INNER JOIN tbl_share AS ts ON ts.edu_idx = tc.edu_idx
+        WHERE ts.shared_id = #{user_id}
+        <include refid="whereCondition"></include>
     </select>
 </mapper>

@@ -66,6 +66,7 @@
             </div>
             <div id="div_err_display_start" style="display: none;"></div>
             <div id="div_err_display_end" style="display: none;"></div>
+            <div id="div_err_display_date" style="display: none;"></div>
         </div>
 
         <div class="mb-3">
@@ -101,7 +102,7 @@
         </div>
 
         <div class="d-grid gap-2">
-            <button class="btn btn-primary" type="submit">학습 수정</button>
+            <button class="btn btn-primary" type="submit" id="modifyBtn">학습 수정</button>
             <button class="btn btn-secondary" type="button" onclick="location.href='/myclass/view?edu_idx=${myclassDTO.edu_idx}'">이전으로</button>
         </div>
     </form>
@@ -172,6 +173,21 @@
 
     $('#display_n').on("click", function() {
         $('#display_date').attr("style", "display:none");
+    });
+
+    document.getElementById("modifyBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let divErr = document.getElementById("div_err_display_date");
+        let start = document.getElementById("display_start");
+        let end = document.getElementById("display_end");
+        if(start.value > end.value) {
+            divErr.innerHTML = "<span style='color:red;'>시작기간이 끝기간보다 늦습니다.</span>";
+            divErr.style.display = "block";
+        } else {
+            document.getElementById("frmModify").submit();
+        }
     });
 </script>
 

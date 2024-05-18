@@ -25,7 +25,10 @@ public class MyclassDTO {
 
     @NotBlank(message = "노출여부를 선택하세요.")
     private String display_state;
+    
+    @NotBlank(message = "시작기간을 선택하세요.")
     private String display_start;
+    @NotBlank(message = "끝기간을 선택하세요.")
     private String display_end;
     private String category;
     private String tag;

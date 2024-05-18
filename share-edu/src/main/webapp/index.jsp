@@ -5,21 +5,35 @@
 <head>
     <title>JSP - Hello World</title>
 </head>
-<body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
-<c:if test="${empty sessionScope.user_id}" var="noLogin">
-    <a href="/login/login">로그인</a>
-    <a href="/member/join">회원가입</a>
-</c:if>
-<c:if test="${not noLogin}">
-    <a href="/login/logout">로그아웃</a>
-    <a href="/member/mypage?user_id=${sessionScope.user_id}">내정보수정</a>
-    <a href="/myclass/home?member_idx=${sessionScope.member_idx}">My Class</a>
-</c:if>
-${sessionScope.user_id}
-${sessionScope.name}
+<body class="text-center text-dark bg-light bg-opacity-25">
+<%@include file="/WEB-INF/common/header.jsp"%>
+<div class="cover-container w-50 mx-auto my-5">
+    <main class="px-3">
+        <c:choose>
+            <c:when test="${user_id != null}">
+                <h1>${name}님 환영합니다.</h1>
+                <p class="lead">
+                    방문해주셔서 감사합니다.
+                </p>
+                <p class="lead">
+                    <a href="/login/logout" class="btn btn-lg btn-secondary fw-bold border-white text-white bg-secondary">로그아웃</a>
+                    <a href="/myclass/home?member_idx=${sessionScope.member_idx}" class="btn btn-lg btn-secondary fw-bold border-white text-white bg-secondary">오늘의 학습</a>
+                </p>
+            </c:when>
+            <c:otherwise>
+                <h1>환영합니다.</h1>
+                <p class="lead">
+                    방문해주셔서 감사합니다.
+                    서비스를 이용하시려면 로그인이 필요합니다.
+                </p>
+                <p class="lead">
+                    <a href="/login/login" class="btn btn-lg btn-secondary fw-bold border-white text-white bg-secondary">로그인</a>
+                    <a href="/member/join" class="btn btn-lg btn-secondary fw-bold border-white text-white bg-secondary">회원가입</a>
+                </p>
+            </c:otherwise>
+        </c:choose>
+    </main>
+</div
+<%@include file="/WEB-INF/common/footer.jsp"%>
 </body>
 </html>
